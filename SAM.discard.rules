@@ -1,0 +1,38 @@
+##########################################################################
+#
+# This rules file checks the events matching discard conditions and
+# updates the event condition to be suppressed at Collection layer
+#
+# Version Info
+#################
+# Vijay Achary      05-May-2016     Proj-1342 Drop 7 , First draft for Alarm discard rules
+#
+############################################################################
+
+log(WARN, "Entering SAM.discard.rules >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
+
+$DiscardFlag = "false"
+
+if(regmatch(@Summary,"cliLoginMaxAttempts")){
+	$DiscardFlag = "true"
+}
+else if(regmatch(@Summary,"sshLoginMaxAttempts")){
+	$DiscardFlag = "true"
+}
+else if(regmatch(@Summary,"configurationRollBackFileSyncOperationPerformed")){
+	$DiscardFlag = "true"
+}
+else if(regmatch(@Summary,"NTPServerChange")){
+	$DiscardFlag = "true"
+}
+
+if(match($DiscardFlag,"true")){
+	@AlmLifeCycleStatus = 20
+	@SentToHEA = 99
+	@SentToAgg = 10
+	log(WARN,"@SentToHEA set to " + @SentToHEA)
+	log(WARN,"@SentToAgg set to " + @SentToAgg)
+	log(WARN,"Discarding Event: The event will be suppressed at collection layer. Identifier: " + @Identifier)
+}
+
+log(WARN,"<<<<< Leaving... SAM.discard.rules >>>>>")

@@ -1,0 +1,10 @@
+# For setting Expire time
+#Entries in this lookup table have the following format:
+#
+#{<"AlarmName">,<expiretime>}
+
+table expiretime_table =
+{
+{"SdpBindingNotReady","600"},
+}
+default = {"Unknown"}
